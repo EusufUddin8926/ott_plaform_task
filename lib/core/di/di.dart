@@ -3,10 +3,14 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ott_platform_task/features/home/presentation/bloc/home_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../features/home/data/datasources/movie_remote_data_source.dart';
+import '../../features/listing/data/repositories/listing_movie_repository_impl.dart';
+import '../../features/listing/domain/repositories/listing_movie_repository.dart';
+import '../../features/listing/domain/usecases/get_all_movies.dart';
+import '../../features/listing/presentation/bloc/listing_bloc.dart';
+import '../../shared/data/remote/movie_remote_data_source.dart';
 import '../../features/home/data/repositories/movie_repository_impl.dart';
 import '../../features/home/domain/repositories/movie_repository.dart';
-import '../network/api_service.dart';
+import '../../shared/data/remote/api_service.dart';
 import '../network/dio_factory.dart';
 import '../route/routes.dart';
 import '../theme/bloc/theme_bloc.dart';
@@ -42,6 +46,11 @@ Future<void> init() async {
   getIt.registerLazySingleton<MovieRemoteDataSource>(() => MovieRemoteDataSource(getIt()));
   getIt.registerLazySingleton<MovieRepository>(() => MovieRepositoryImpl(getIt()));
   getIt.registerFactory(() => HomeBloc(movieRepository: getIt()));
+
+
+  getIt.registerLazySingleton<ListingMovieRepository>(() => ListingMovieRepositoryImpl(getIt()));
+  getIt.registerLazySingleton<GetAllMovies>(() => GetAllMovies(getIt<ListingMovieRepository>()));
+  getIt.registerFactory(() => ListingBloc(getAllMoviesUseCase: getIt()));
 
   getIt.registerSingleton(AppRouter());
 }

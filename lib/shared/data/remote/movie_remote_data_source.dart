@@ -1,20 +1,22 @@
 import 'package:ott_platform_task/core/constants/app_constant.dart';
 
-import '../../../../core/network/api_service.dart';
-import '../models/movie_model.dart';
+import '../../../core/models/movie.dart';
+import 'api_service.dart';
+import '../../../core/models/movie_model.dart';
 
 class MovieRemoteDataSource {
   final ApiService api;
 
   MovieRemoteDataSource(this.api);
 
-  Future<List<MovieModel>> searchMovies({required String query, String? year}) async {
+  Future<List<MovieModel>> searchMovies({required String query, String? year, int? page}) async {
     final response = await api.get(
-      endPoint: '',
+      endPoint: AppConstant.baseUrl,
       queryParams: {
         'apikey': AppConstant.apiKey,
         's': query,
         if (year != null) 'y': year,
+        'page': page.toString(),
       },
     );
 
@@ -26,4 +28,16 @@ class MovieRemoteDataSource {
       throw Exception(response.data['Error']);
     }
   }
+
+  Future<List<Movie>> getAllMovies({
+    required String query,
+    String? year,
+    int page = 1,
+  }) async {
+    final movieModels = await searchMovies(query: query, year: year, page: page);
+    return movieModels;
+  }
+
+
+
 }

@@ -4,6 +4,7 @@ import 'package:ott_platform_task/features/home/presentation/bloc/home_bloc.dart
 import 'core/di/di.dart';
 import 'core/route/routes.dart';
 import 'core/theme/bloc/theme_bloc.dart';
+import 'features/listing/presentation/bloc/listing_bloc.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => getIt<ThemeBloc>()),
         BlocProvider(create: (_) => getIt<HomeBloc>()),
+        BlocProvider(create: (_) => getIt<ListingBloc>()),
       ],
       child: Builder(
         builder: (context) {

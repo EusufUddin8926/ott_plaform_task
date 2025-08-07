@@ -1,6 +1,6 @@
-import '../../domain/entities/movie.dart';
+import '../../../../core/models/movie.dart';
 import '../../domain/repositories/movie_repository.dart';
-import '../datasources/movie_remote_data_source.dart';
+import '../../../../shared/data/remote/movie_remote_data_source.dart';
 
 class MovieRepositoryImpl implements MovieRepository {
   final MovieRemoteDataSource remote;

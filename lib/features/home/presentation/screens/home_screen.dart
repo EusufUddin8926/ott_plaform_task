@@ -2,11 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ott_platform_task/core/theme/widgets/theme_switch.dart';
 import 'package:ott_platform_task/features/home/presentation/bloc/home_event.dart';
+import '../../../../core/models/movie.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_state.dart';
-import '../../domain/entities/movie.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -131,6 +132,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     );*/
+
+                    final filterTitle = title == 'Batman' ? 'Batman' : 'movie';
+                    final filterYear = title == 'Latest Movies' ? '2022' : null;
+
+                    context.push(
+                      '/listing?title=$title&filterTitle=$filterTitle${filterYear != null ? '&filterYear=$filterYear' : ''}',
+                    );
                   },
                   child: const Text('See All'),
                 ),

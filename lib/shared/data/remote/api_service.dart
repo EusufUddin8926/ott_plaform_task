@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 
-import 'package:dio/dio.dart';
 
 class ApiService {
   final Dio _dio;

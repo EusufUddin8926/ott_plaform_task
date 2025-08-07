@@ -1,4 +1,4 @@
-import '../../domain/entities/movie.dart';
+import '../../../../core/models/movie.dart';
 
 abstract class HomeState {}
 
