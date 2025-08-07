@@ -183,6 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return GestureDetector(
                 onTap: (){
                  // Navigator.push(context, MaterialPageRoute(builder: (_) => MovieDetailsPage(imdbID: movie.imdbID))),
+                  context.push('/details?imdbID=${movie.imdbID}');
                 },
 
                 child: ClipRRect(

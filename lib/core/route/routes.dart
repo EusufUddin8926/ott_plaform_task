@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/listing/presentation/screen/listing_page.dart';
+import '../../features/movie_details/presentation/screen/movie_details_page.dart';
 
 class AppRouter {
   late final GoRouter _router;
@@ -28,16 +29,25 @@ class AppRouter {
             final filterTitle = state.uri.queryParameters['filterTitle'];
             final filterYear = state.uri.queryParameters['filterYear'];
 
-            return ListingPage(
+            return MovieListingPage(
               title: title,
               filterTitle: filterTitle!,
               filterYear: filterYear,
             );
           },
+        ),
+        GoRoute(
+          path: '/details',
+          name: 'details',
+          builder: (context, state) {
+            final imdbID = state.uri.queryParameters['imdbID']!;
+            return MovieDetailsPage(imdbID: imdbID);
+          },
         )
+
       ],
       errorBuilder: (context, state) => const Scaffold(
-        body: Center(child: Text('Route not found: }')),
+        body: Center(child: Text('Route not found')),
       ),
     );
   }

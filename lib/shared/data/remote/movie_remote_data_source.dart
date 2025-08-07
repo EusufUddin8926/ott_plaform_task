@@ -1,6 +1,7 @@
 import 'package:ott_platform_task/core/constants/app_constant.dart';
 
 import '../../../core/models/movie.dart';
+import '../../../features/movie_details/data/models/movie_details_model.dart';
 import 'api_service.dart';
 import '../../../core/models/movie_model.dart';
 
@@ -36,6 +37,20 @@ class MovieRemoteDataSource {
   }) async {
     final movieModels = await searchMovies(query: query, year: year, page: page);
     return movieModels;
+  }
+
+
+  Future<MovieDetailsModel> fetchMovieDetails(String imdbID) async {
+    final response = await api.get(endPoint: AppConstant.baseUrl, queryParams: {
+      'apikey': AppConstant.apiKey,
+      'i': imdbID,
+    });
+
+    if (response.data['Response'] == 'True') {
+      return MovieDetailsModel.fromJson(response.data);
+    } else {
+      throw Exception(response.data['Error']);
+    }
   }
 
 
