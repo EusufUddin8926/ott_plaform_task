@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'colors/app_colors.dart';
+import '../utils/color.dart';
 
 class AppTheme {
   static final ThemeData light = ThemeData(
@@ -11,8 +11,8 @@ class AppTheme {
       foregroundColor: AppColors.lightAppBarForeground,
     ),
     switchTheme: SwitchThemeData(
-      thumbColor: MaterialStateProperty.all(AppColors.lightSwitchThumb),
-      trackColor: MaterialStateProperty.all(AppColors.lightSwitchTrack),
+      thumbColor: WidgetStateProperty.all(AppColors.lightSwitchThumb),
+      trackColor: WidgetStateProperty.all(AppColors.lightSwitchTrack),
     ),
   );
 
@@ -25,8 +25,8 @@ class AppTheme {
       foregroundColor: AppColors.darkAppBarForeground,
     ),
     switchTheme: SwitchThemeData(
-      thumbColor: MaterialStateProperty.all(AppColors.darkSwitchThumb),
-      trackColor: MaterialStateProperty.all(AppColors.darkSwitchTrack),
+      thumbColor: WidgetStateProperty.all(AppColors.darkSwitchThumb),
+      trackColor: WidgetStateProperty.all(AppColors.darkSwitchTrack),
     ),
   );
 }
