@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ott_platform_task/core/theme/widgets/theme_switch.dart';
+import '../../../../core/constants/app_constant.dart';
 import '../../../../core/models/movie.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
@@ -47,47 +48,46 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
     final yearFontSize = (screenWidth / 55).clamp(10.0, 14.0);
 
     return GestureDetector(
-      onTap: () {
-        context.push('/details?imdbID=${movie.imdbID}');
-      },
+      onTap: () => context.push('/details?imdbID=${movie.imdbID}&title=${movie.title}'),
       child: SizedBox(
         width: itemWidth.toDouble(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AspectRatio(
-              aspectRatio: 2 / 3,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: CachedNetworkImage(
-                  imageUrl: movie.poster != 'N/A' ? movie.poster : '',
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) =>
-                      Container(color: Colors.grey.shade800),
-                  errorWidget: (context, url, error) =>
-                      Container(color: Colors.grey.shade800),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AspectRatio(
+                aspectRatio: 2 / 3,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: movie.poster != 'N/A' ? movie.poster : '',
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        Container(color: Colors.grey.shade800),
+                    errorWidget: (context, url, error) =>
+                        Container(color: Colors.grey.shade800),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              movie.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: titleFontSize.toDouble(),
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
+              const SizedBox(height: 8),
+              Text(
+                movie.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: titleFontSize.toDouble(),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            Text(
-              movie.year,
-              style: TextStyle(
-                fontSize: yearFontSize.toDouble(),
-                color: Colors.grey[400],
+              Text(
+                movie.year,
+                style: TextStyle(
+                  fontSize: yearFontSize.toDouble(),
+                  color: Colors.grey[400],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -112,13 +112,13 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                 TextButton(
                   onPressed: () {
                     // Navigate to the listing page with the filter
-                    final filterTitle = title == 'Batman' ? 'Batman' : 'movie';
-                    final filterYear = title == 'Latest Movies' ? '2022' : null;
+                    final filterTitle = title == AppConstant.batmanMovies ? AppConstant.batmanMovies : AppConstant.movies;
+                    final filterYear = title == AppConstant.latestMovies ? '2022' : null;
                     context.push(
                       '/listing?title=$title&filterTitle=$filterTitle${filterYear != null ? '&filterYear=$filterYear' : ''}',
                     );
                   },
-                  child: const Text('See All'),
+                  child: const Text(AppConstant.seeAll),
                 ),
               ],
             ),
@@ -150,8 +150,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
       ),
     );
   }
-  
-  
+
   Widget buildCarousel(List<Movie> bannerMovies) {
     return SizedBox(
       width:
@@ -217,7 +216,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                   : Colors.transparent,
               elevation: _isScrolled ? 4 : 0,
               centerTitle: false,
-              title: const Text('VOD Home', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              title: const Text(AppConstant.homeTitle, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
               actions: const [
                 ThemeToggleButton(),
                 SizedBox(width: 16),
@@ -278,7 +277,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                                 const SizedBox(height: 20),
                                 ElevatedButton(
                                   onPressed: () async{
-                                    context.push('/details?imdbID=${selectedMovie.imdbID}');
+                                    context.push('/details?imdbID=${selectedMovie.imdbID}&title=${selectedMovie.title}');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.redAccent,
@@ -286,7 +285,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 24, vertical: 12),
                                   ),
-                                  child: const Text("Watch Now"),
+                                  child: const Text(AppConstant.watchNow),
                                 ),
                                 const SizedBox(height: 40),
                                 buildCarousel(bannerMovies)
@@ -301,9 +300,9 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            buildMovieRail("Batman", state.batmanMovies,
+                            buildMovieRail(AppConstant.batmanMovies, state.batmanMovies,
                                 constraints.maxWidth),
-                            buildMovieRail("Latest Movies", state.latestMovies,
+                            buildMovieRail(AppConstant.latestMovies, state.latestMovies,
                                 constraints.maxWidth),
                           ],
                         ),

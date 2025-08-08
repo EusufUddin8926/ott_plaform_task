@@ -49,7 +49,7 @@ Future<void> init() async {
 
   getIt.registerLazySingleton<ThemeBloc>(() => ThemeBloc());
 
-  getIt.registerLazySingleton<MovieRemoteDataSource>(() => MovieRemoteDataSource(getIt()));
+  getIt.registerLazySingleton<MovieRemoteDataSource>(() => MovieRemoteDataSource(getIt(), getIt()));
   getIt.registerLazySingleton<MovieRepository>(() => MovieRepositoryImpl(getIt()));
   getIt.registerFactory(() => HomeBloc(movieRepository: getIt()));
 

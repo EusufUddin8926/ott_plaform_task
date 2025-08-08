@@ -1,3 +1,5 @@
+import 'package:ott_platform_task/core/constants/app_constant.dart';
+
 import '../../../../core/models/movie.dart';
 import '../../domain/repositories/movie_repository.dart';
 import '../../../../shared/data/remote/movie_remote_data_source.dart';
@@ -9,13 +11,13 @@ class MovieRepositoryImpl implements MovieRepository {
 
   @override
   Future<List<Movie>> getBannerMovies() async {
-    final movies = await remote.searchMovies(query: 'Batman');
+    final movies = await remote.searchMovies(query: AppConstant.batmanMovies);
     return movies.take(5).toList();
   }
 
   @override
-  Future<List<Movie>> getBatmanMovies() => remote.searchMovies(query: 'Batman');
+  Future<List<Movie>> getBatmanMovies() => remote.searchMovies(query: AppConstant.batmanMovies);
 
   @override
-  Future<List<Movie>> getLatestMovies() => remote.searchMovies(query: 'movie', year: '2022');
+  Future<List<Movie>> getLatestMovies() => remote.searchMovies(query: AppConstant.movies, year: '2022');
 }

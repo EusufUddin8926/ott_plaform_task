@@ -9,9 +9,9 @@ import '../../../core/models/movie_model.dart';
 
 class MovieRemoteDataSource {
   final ApiService api;
-  final netwrokInfo = getIt<NetworkInfo>();
+  final NetworkInfo netwrokInfo;
 
-  MovieRemoteDataSource(this.api);
+  MovieRemoteDataSource(this.api, this.netwrokInfo);
 
   Future<void> _checkNetwork() async {
     final hasInternet = await netwrokInfo.isConnected;

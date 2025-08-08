@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/app_constant.dart';
 import '../../../../core/di/di.dart'; // your getIt or DI setup
+import '../../../../core/models/movie.dart';
 import '../bloc/listing_bloc.dart';
 import '../bloc/listing_event.dart';
 import '../bloc/listing_state.dart';
@@ -76,6 +79,7 @@ class _MovieListingPageState extends State<MovieListingPage> {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           centerTitle: false,
+          automaticallyImplyLeading: kIsWeb ? false : true,
           title: Text(widget.title),
         ),
         body: BlocBuilder<ListingBloc, ListingState>(
@@ -84,7 +88,7 @@ class _MovieListingPageState extends State<MovieListingPage> {
               return const Center(child: CircularProgressIndicator());
             } else if (state is ListingSuccess) {
               if (state.movies.isEmpty) {
-                return const Center(child: Text('No movies found.'));
+                return const Center(child: Text(AppConstant.noMoviesFound));
               }
 
               return RefreshIndicator(
@@ -102,42 +106,7 @@ class _MovieListingPageState extends State<MovieListingPage> {
                   itemBuilder: (context, index) {
                     if (index < state.movies.length) {
                       final movie = state.movies[index];
-                      return GestureDetector(
-                        onTap: () => context.push('/details?imdbID=${movie.imdbID}'),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: 70,
-                                height: 90,
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                  movie.poster != 'N/A' ? movie.poster : '',
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) =>
-                                      Container(color: Colors.grey.shade800),
-                                  errorWidget: (context, url, error) =>
-                                      Container(color: Colors.grey.shade800),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(movie.title),
-                                    const SizedBox(height: 4),
-                                    Text(movie.year),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                      return singleListingItem(movie);
                     } else {
                       // Loading indicator for pagination
                       return const Padding(
@@ -154,6 +123,46 @@ class _MovieListingPageState extends State<MovieListingPage> {
               return const SizedBox.shrink();
             }
           },
+        ),
+      ),
+    );
+  }
+
+
+  Widget singleListingItem(Movie movie) {
+    return GestureDetector(
+      onTap: () => context.push('/details?imdbID=${movie.imdbID}&title=${movie.title}'),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 12, vertical: 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 70,
+              height: 90,
+              child: CachedNetworkImage(
+                imageUrl:
+                movie.poster != 'N/A' ? movie.poster : '',
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                    Container(color: Colors.grey.shade800),
+                errorWidget: (context, url, error) =>
+                    Container(color: Colors.grey.shade800),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(movie.title),
+                  const SizedBox(height: 4),
+                  Text(movie.year),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

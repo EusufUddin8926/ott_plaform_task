@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ott_platform_task/core/constants/app_constant.dart';
 import 'package:ott_platform_task/core/theme/widgets/theme_switch.dart';
 import 'package:ott_platform_task/features/home/presentation/bloc/home_event.dart';
 import '../../../../core/models/movie.dart';
@@ -28,14 +29,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
-
       builder: (context, state) {
         if (state is HomeLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is HomeSuccess) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('VOD Home'),
+              title: const Text(AppConstant.homeTitle),
               actions: const [ThemeToggleButton()],
             ),
             body: ListView(
@@ -43,14 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 buildCarousel(state.bannerMovies),
                 const SizedBox(height: 12),
-                buildRail('Batman', state.batmanMovies),
+                buildRail(AppConstant.batmanMovies, state.batmanMovies),
                 const SizedBox(height: 12),
-                buildRail('Latest Movies', state.latestMovies),
+                buildRail(AppConstant.latestMovies, state.latestMovies),
               ],
             ),
           );
         } else if (state is HomeFailure) {
-          return Center(child: Text("Error: ${state.message}"));
+          return Center(child: Text("${AppConstant.errorTitle}: ${state.message}"));
         } else {
           return const SizedBox.shrink();
         }
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onTap: () {
         // Navigate to the movie details page
-        context.push('/details?imdbID=${movie.imdbID}');
+        context.push('/details?imdbID=${movie.imdbID}&title=${movie.title}');
 
       },
       child: SizedBox(
@@ -154,10 +154,11 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.only(left: 12, right: 12),
       child: Column(
         children: [
+          // Carousel Slider displaying banner movies
           CarouselSlider.builder(
             itemCount: bannerMovies.length,
             options: CarouselOptions(
-              height: 220,
+              height: MediaQuery.sizeOf(context).height*0.25,
               viewportFraction: 0.8,
               enlargeCenterPage: true,
               autoPlay: true,
@@ -171,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
               final movie = bannerMovies[index];
               return GestureDetector(
                 onTap: (){
-                  context.push('/details?imdbID=${movie.imdbID}');
+                  context.push('/details?imdbID=${movie.imdbID}&title=${movie.title}');
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
@@ -210,6 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
+          // Carousel bottom indicator dots
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: bannerMovies.asMap().entries.map((entry) {

@@ -11,8 +11,9 @@ import '../bloc/movie_details_state.dart';
 
 class MovieDetailsPage extends StatelessWidget {
   final String imdbID;
+  final String title;
 
-  const MovieDetailsPage({super.key, required this.imdbID});
+  const MovieDetailsPage({super.key, required this.imdbID, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class MovieDetailsPage extends StatelessWidget {
       create: (_) => getIt<MovieDetailsBloc>()..add(FetchMovieDetails(imdbID)),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Movie Details'),
+          title:  Text(title),
           automaticallyImplyLeading: kIsWeb ? false : true,
         ),
         body: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
@@ -31,65 +32,80 @@ class MovieDetailsPage extends StatelessWidget {
               return Center(child: Text(state.message));
             } else if (state is MovieDetailsLoaded) {
               final md = state.movieDetails;
-              const isWeb = kIsWeb;
               return ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
-                  SizedBox(
-                    width: MediaQuery.sizeOf(context).width,
-                    height: isWeb ? MediaQuery.sizeOf(context).height*0.80 : null,
-                    child: ResponsiveVideoPlayer(
-                      imdbId: imdbID,
-                      videoUrl: AppConstant.videoUrls,
-                      videoKey: 'video_$imdbID',
-                    ),
-                  ),
+                  videoPlayer(context, imdbID, title, md.poster),
                   const SizedBox(height: 16),
-                  Text(
-                    md.title,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    '${md.year} | ${md.genre} | Rated: ${md.rated}',
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 120,
-                        child: CachedNetworkImage(
-                          imageUrl: md.poster != 'N/A' ? md.poster : '',
-                          placeholder: (context, url) =>
-                              Container(color: Colors.grey.shade800),
-                          errorWidget: (context, url, error) =>
-                              Container(color: Colors.grey.shade800),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Text(
-                          md.plot,
-                          style: const TextStyle(fontSize: 16, height: 1.4),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Text('Director: ${md.director}'),
-                  Text('Writer: ${md.writer}'),
-                  Text('Actors: ${md.actors}'),
-                  Text('Language: ${md.language}'),
-                  Text('Country: ${md.country}'),
-                  Text('Awards: ${md.awards}'),
-                  Text('IMDb Rating: ${md.imdbRating}'),
+                  buildMovieDetailsText(md)
                 ],
               );
             }
             return const SizedBox.shrink();
           },
         ),
+      ),
+    );
+  }
+
+
+  Widget buildMovieDetailsText(md) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          md.title,
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          '${md.year} | ${md.genre} | Rated: ${md.rated}',
+          style: const TextStyle(fontSize: 14, color: Colors.grey),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 120,
+              child: CachedNetworkImage(
+                imageUrl: md.poster != 'N/A' ? md.poster : '',
+                placeholder: (context, url) =>
+                    Container(color: Colors.grey.shade800),
+                errorWidget: (context, url, error) =>
+                    Container(color: Colors.grey.shade800),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                md.plot,
+                style: const TextStyle(fontSize: 16, height: 1.4),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Text('${AppConstant.director}: ${md.director}'),
+        Text('${AppConstant.writer}: ${md.writer}'),
+        Text('${AppConstant.actors}: ${md.actors}'),
+        Text('${AppConstant.language}: ${md.language}'),
+        Text('${AppConstant.country}: ${md.country}'),
+        Text('${AppConstant.awards}: ${md.awards}'),
+        Text('${AppConstant.imdbRating}: ${md.imdbRating}'),
+      ],
+    );
+  }
+
+
+  Widget videoPlayer(BuildContext context, String imdbID, String title, String poster){
+    const isWeb = kIsWeb;
+    return  SizedBox(
+      width: MediaQuery.sizeOf(context).width,
+      height: isWeb ? MediaQuery.sizeOf(context).height*0.80 : null,
+      child: ResponsiveVideoPlayer(
+        imdbId: imdbID,
+        videoUrl: AppConstant.videoUrls,
+        videoKey: 'video_$imdbID',
       ),
     );
   }

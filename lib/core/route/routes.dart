@@ -40,12 +40,14 @@ class AppRouter {
             );
           },
         ),
+
         GoRoute(
           path: '/details',
           name: 'details',
           builder: (context, state) {
             final imdbID = state.uri.queryParameters['imdbID']!;
-            return MovieDetailsPage(imdbID: imdbID);
+            final title = state.uri.queryParameters['title']!;
+            return MovieDetailsPage(imdbID: imdbID, title: title,);
           },
         )
 
