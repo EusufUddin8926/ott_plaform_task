@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
+
       builder: (context, state) {
         if (state is HomeLoading) {
           return const Center(child: CircularProgressIndicator());
