@@ -1,10 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ott_platform_task/features/movie_details/presentation/screen/responsive_video_player.dart';
 import '../../../../core/constants/app_constant.dart';
 import '../../../../core/di/di.dart';
-import '../../domain/usecase/get_movie_details_usecase.dart';
 import '../bloc/movie_details_bloc.dart';
 import '../bloc/movie_details_event.dart';
 import '../bloc/movie_details_state.dart';
@@ -19,7 +19,10 @@ class MovieDetailsPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => getIt<MovieDetailsBloc>()..add(FetchMovieDetails(imdbID)),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Movie Details')),
+        appBar: AppBar(
+          title: const Text('Movie Details'),
+          automaticallyImplyLeading: kIsWeb ? false : true,
+        ),
         body: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
           builder: (context, state) {
             if (state is MovieDetailsLoading) {
@@ -28,13 +31,18 @@ class MovieDetailsPage extends StatelessWidget {
               return Center(child: Text(state.message));
             } else if (state is MovieDetailsLoaded) {
               final md = state.movieDetails;
+              const isWeb = kIsWeb;
               return ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
-                  ResponsiveVideoPlayer(
-                    imdbId: imdbID,
-                    videoUrl: AppConstant.videoUrls,
-                    videoKey: 'video_$imdbID',
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width,
+                    height: isWeb ? MediaQuery.sizeOf(context).height*0.80 : null,
+                    child: ResponsiveVideoPlayer(
+                      imdbId: imdbID,
+                      videoUrl: AppConstant.videoUrls,
+                      videoKey: 'video_$imdbID',
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Text(
