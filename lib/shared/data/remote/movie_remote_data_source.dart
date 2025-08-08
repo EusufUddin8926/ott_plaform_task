@@ -29,6 +29,7 @@ class MovieRemoteDataSource {
         'apikey': AppConstant.apiKey,
         's': query,
         if (year != null) 'y': year,
+        if (page != null)
         'page': page.toString(),
       },
     );

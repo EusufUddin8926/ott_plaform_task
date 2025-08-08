@@ -123,8 +123,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 TextButton(
                   onPressed: () {
                     // Navigate to the listing page with the filter
-                    final filterTitle = title == 'Batman' ? 'Batman' : 'movie';
-                    final filterYear = title == 'Latest Movies' ? '2022' : null;
+                    final filterTitle =
+                    title == AppConstant.batmanMovies ? AppConstant.batmanMovies : AppConstant.movies;
+                    final filterYear = title == AppConstant.latestMovies ? '2022' : null;
                     context.push(
                       '/listing?title=$title&filterTitle=$filterTitle${filterYear != null ? '&filterYear=$filterYear' : ''}',
                     );

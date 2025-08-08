@@ -104,7 +104,7 @@ class MovieDetailsPage extends StatelessWidget {
       height: isWeb ? MediaQuery.sizeOf(context).height*0.80 : null,
       child: ResponsiveVideoPlayer(
         imdbId: imdbID,
-        videoUrl: AppConstant.videoUrls,
+        videoUrl: AppConstant.videoUrl,
         videoKey: 'video_$imdbID',
       ),
     );

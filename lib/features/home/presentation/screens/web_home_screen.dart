@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ott_platform_task/core/theme/widgets/theme_switch.dart';
+import 'package:ott_platform_task/core/utils/color.dart';
 import '../../../../core/constants/app_constant.dart';
 import '../../../../core/models/movie.dart';
 import '../bloc/home_bloc.dart';
@@ -62,10 +63,8 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                   child: CachedNetworkImage(
                     imageUrl: movie.poster != 'N/A' ? movie.poster : '',
                     fit: BoxFit.cover,
-                    placeholder: (context, url) =>
-                        Container(color: Colors.grey.shade800),
-                    errorWidget: (context, url, error) =>
-                        Container(color: Colors.grey.shade800),
+                    placeholder: (context, url) => Container(color: Colors.grey.shade800),
+                    errorWidget: (context, url, error) => Container(color: Colors.grey.shade800),
                   ),
                 ),
               ),
@@ -112,7 +111,8 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                 TextButton(
                   onPressed: () {
                     // Navigate to the listing page with the filter
-                    final filterTitle = title == AppConstant.batmanMovies ? AppConstant.batmanMovies : AppConstant.movies;
+                    final filterTitle =
+                        title == AppConstant.batmanMovies ? AppConstant.batmanMovies : AppConstant.movies;
                     final filterYear = title == AppConstant.latestMovies ? '2022' : null;
                     context.push(
                       '/listing?title=$title&filterTitle=$filterTitle${filterYear != null ? '&filterYear=$filterYear' : ''}',
@@ -128,23 +128,23 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
             height: 300,
             child: isWideScreen
                 ? GridView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: movies.length,
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                mainAxisExtent: 160,
-                mainAxisSpacing: 12,
-              ),
-              itemBuilder: (context, index) => buildMovieItem(context, movies[index]),
-            )
+                    scrollDirection: Axis.horizontal,
+                    itemCount: movies.length,
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      mainAxisExtent: 160,
+                      mainAxisSpacing: 12,
+                    ),
+                    itemBuilder: (context, index) => buildMovieItem(context, movies[index]),
+                  )
                 : ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: movies.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 12),
-              itemBuilder: (context, index) => buildMovieItem(context, movies[index]),
-            ),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: movies.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 12),
+                    itemBuilder: (context, index) => buildMovieItem(context, movies[index]),
+                  ),
           ),
         ],
       ),
@@ -153,8 +153,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
 
   Widget buildCarousel(List<Movie> bannerMovies) {
     return SizedBox(
-      width:
-      MediaQuery.sizeOf(context).width * 0.15,
+      width: MediaQuery.sizeOf(context).width * 0.15,
       child: CarouselSlider.builder(
         itemCount: bannerMovies.length,
         options: CarouselOptions(
@@ -164,32 +163,20 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
           enableInfiniteScroll: true,
           enlargeCenterPage: true,
           onPageChanged: (index, _) {
-            setState(() =>
-            _selectedBannerIndex = index);
+            setState(() => _selectedBannerIndex = index);
           },
         ),
         itemBuilder: (context, index, _) {
           final movie = bannerMovies[index];
           return GestureDetector(
-            onTap: () => setState(
-                    () => _selectedBannerIndex = index),
+            onTap: () => setState(() => _selectedBannerIndex = index),
             child: ClipRRect(
-              borderRadius:
-              BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8),
               child: CachedNetworkImage(
-                imageUrl: movie.poster != 'N/A'
-                    ? movie.poster
-                    : '',
+                imageUrl: movie.poster != 'N/A' ? movie.poster : '',
                 fit: BoxFit.cover,
-                placeholder: (context, url) =>
-                    Container(
-                        color:
-                        Colors.grey.shade800),
-                errorWidget:
-                    (context, url, error) =>
-                    Container(
-                        color: Colors
-                            .grey.shade800),
+                placeholder: (context, url) => Container(color: Colors.grey.shade800),
+                errorWidget: (context, url, error) => Container(color: Colors.grey.shade800),
               ),
             ),
           );
@@ -203,7 +190,11 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         if (state is HomeLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return Container(
+              width: MediaQuery.sizeOf(context).width,
+              height: MediaQuery.sizeOf(context).height,
+              color: AppColors.black,
+              child: const Center(child: CircularProgressIndicator()));
         } else if (state is HomeSuccess) {
           final bannerMovies = state.bannerMovies;
           final selectedMovie = bannerMovies[_selectedBannerIndex];
@@ -211,16 +202,14 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
           return Scaffold(
             extendBodyBehindAppBar: true,
             appBar: AppBar(
-              backgroundColor: _isScrolled
-                  ? Colors.black.withOpacity(0.9)
-                  : Colors.transparent,
+              backgroundColor: _isScrolled ? Colors.black.withOpacity(0.9) : Colors.transparent,
               elevation: _isScrolled ? 4 : 0,
               centerTitle: false,
-              title: const Text(AppConstant.homeTitle, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              title:
+                  const Text(AppConstant.homeTitle, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
               actions: const [
                 ThemeToggleButton(),
                 SizedBox(width: 16),
-
               ],
             ),
             body: LayoutBuilder(
@@ -232,9 +221,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                       Stack(
                         children: [
                           CachedNetworkImage(
-                            imageUrl: selectedMovie.poster != 'N/A'
-                                ? selectedMovie.poster
-                                : '',
+                            imageUrl: selectedMovie.poster != 'N/A' ? selectedMovie.poster : '',
                             width: constraints.maxWidth,
                             height: constraints.maxHeight * 0.78,
                             fit: BoxFit.cover,
@@ -243,11 +230,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                             height: constraints.maxHeight * 0.78,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [
-                                  Colors.black,
-                                  Colors.transparent,
-                                  Colors.black87
-                                ],
+                                colors: [Colors.black, Colors.transparent, Colors.black87],
                                 begin: Alignment.bottomCenter,
                                 end: Alignment.topCenter,
                               ),
@@ -271,19 +254,18 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                                 const SizedBox(height: 12),
                                 Text(
                                   selectedMovie.year,
-                                  style: const TextStyle(
-                                      fontSize: 20, color: Colors.white70),
+                                  style: const TextStyle(fontSize: 20, color: Colors.white70),
                                 ),
                                 const SizedBox(height: 20),
                                 ElevatedButton(
-                                  onPressed: () async{
-                                    context.push('/details?imdbID=${selectedMovie.imdbID}&title=${selectedMovie.title}');
+                                  onPressed: () async {
+                                    context
+                                        .push('/details?imdbID=${selectedMovie.imdbID}&title=${selectedMovie.title}');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.redAccent,
                                     foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 24, vertical: 12),
+                                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                   ),
                                   child: const Text(AppConstant.watchNow),
                                 ),
@@ -300,10 +282,8 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            buildMovieRail(AppConstant.batmanMovies, state.batmanMovies,
-                                constraints.maxWidth),
-                            buildMovieRail(AppConstant.latestMovies, state.latestMovies,
-                                constraints.maxWidth),
+                            buildMovieRail(AppConstant.batmanMovies, state.batmanMovies, constraints.maxWidth),
+                            buildMovieRail(AppConstant.latestMovies, state.latestMovies, constraints.maxWidth),
                           ],
                         ),
                       ),
