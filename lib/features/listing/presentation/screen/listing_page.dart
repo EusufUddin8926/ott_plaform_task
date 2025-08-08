@@ -73,7 +73,9 @@ class _MovieListingPageState extends State<MovieListingPage> {
     return BlocProvider.value(
       value: _listingBloc,
       child: Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
+          centerTitle: false,
           title: Text(widget.title),
         ),
         body: BlocBuilder<ListingBloc, ListingState>(

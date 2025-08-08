@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'package:go_router/go_router.dart';
+import 'package:ott_platform_task/core/theme/widgets/theme_switch.dart';
 import '../../../../core/models/movie.dart';
 import '../../../movie_details/presentation/screen/movie_details_page.dart';
 import '../bloc/home_bloc.dart';
@@ -48,10 +49,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => MovieDetailsPage(imdbID: movie.imdbID)),
-        );
+        context.push('/details?imdbID=${movie.imdbID}');
       },
       child: SizedBox(
         width: itemWidth.toDouble(),
@@ -103,8 +101,29 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: Row(
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () {
+                    // Navigate to the listing page with the filter
+                    final filterTitle = title == 'Batman' ? 'Batman' : 'movie';
+                    final filterYear = title == 'Latest Movies' ? '2022' : null;
+                    context.push(
+                      '/listing?title=$title&filterTitle=$filterTitle${filterYear != null ? '&filterYear=$filterYear' : ''}',
+                    );
+                  },
+                  child: const Text('See All'),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 12),
           SizedBox(
             height: 300,
@@ -132,6 +151,54 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
       ),
     );
   }
+  
+  
+  Widget buildCarousel(List<Movie> bannerMovies) {
+    return SizedBox(
+      width:
+      MediaQuery.sizeOf(context).width * 0.15,
+      child: CarouselSlider.builder(
+        itemCount: bannerMovies.length,
+        options: CarouselOptions(
+          height: 100,
+          autoPlay: true,
+          viewportFraction: 0.4,
+          enableInfiniteScroll: true,
+          enlargeCenterPage: true,
+          onPageChanged: (index, _) {
+            setState(() =>
+            _selectedBannerIndex = index);
+          },
+        ),
+        itemBuilder: (context, index, _) {
+          final movie = bannerMovies[index];
+          return GestureDetector(
+            onTap: () => setState(
+                    () => _selectedBannerIndex = index),
+            child: ClipRRect(
+              borderRadius:
+              BorderRadius.circular(8),
+              child: CachedNetworkImage(
+                imageUrl: movie.poster != 'N/A'
+                    ? movie.poster
+                    : '',
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                    Container(
+                        color:
+                        Colors.grey.shade800),
+                errorWidget:
+                    (context, url, error) =>
+                    Container(
+                        color: Colors
+                            .grey.shade800),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,19 +211,18 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
           final selectedMovie = bannerMovies[_selectedBannerIndex];
 
           return Scaffold(
-            backgroundColor: Colors.black,
             extendBodyBehindAppBar: true,
             appBar: AppBar(
               backgroundColor: _isScrolled
                   ? Colors.black.withOpacity(0.9)
                   : Colors.transparent,
               elevation: _isScrolled ? 4 : 0,
-              title: const Text("Flutter OTT"),
-              actions: [
-                TextButton(onPressed: () {}, child: const Text("Home")),
-                TextButton(onPressed: () {}, child: const Text("Movies")),
-                TextButton(onPressed: () {}, child: const Text("TV Shows")),
-                const SizedBox(width: 16),
+              centerTitle: false,
+              title: const Text('VOD Home', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              actions: const [
+                ThemeToggleButton(),
+                SizedBox(width: 16),
+
               ],
             ),
             body: LayoutBuilder(
@@ -212,14 +278,8 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                                 ),
                                 const SizedBox(height: 20),
                                 ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => MovieDetailsPage(
-                                            imdbID: selectedMovie.imdbID),
-                                      ),
-                                    );
+                                  onPressed: () async{
+                                    context.push('/details?imdbID=${selectedMovie.imdbID}');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.redAccent,
@@ -230,50 +290,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
                                   child: const Text("Watch Now"),
                                 ),
                                 const SizedBox(height: 40),
-                                SizedBox(
-                                  width:
-                                  MediaQuery.sizeOf(context).width * 0.15,
-                                  child: CarouselSlider.builder(
-                                    itemCount: bannerMovies.length,
-                                    options: CarouselOptions(
-                                      height: 100,
-                                      autoPlay: true,
-                                      viewportFraction: 0.4,
-                                      enableInfiniteScroll: true,
-                                      enlargeCenterPage: true,
-                                      onPageChanged: (index, _) {
-                                        setState(() =>
-                                        _selectedBannerIndex = index);
-                                      },
-                                    ),
-                                    itemBuilder: (context, index, _) {
-                                      final movie = bannerMovies[index];
-                                      return GestureDetector(
-                                        onTap: () => setState(
-                                                () => _selectedBannerIndex = index),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                          BorderRadius.circular(8),
-                                          child: CachedNetworkImage(
-                                            imageUrl: movie.poster != 'N/A'
-                                                ? movie.poster
-                                                : '',
-                                            fit: BoxFit.cover,
-                                            placeholder: (context, url) =>
-                                                Container(
-                                                    color:
-                                                    Colors.grey.shade800),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                Container(
-                                                    color: Colors
-                                                        .grey.shade800),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
+                                buildCarousel(bannerMovies)
                               ],
                             ),
                           ),

@@ -4,7 +4,6 @@ import 'package:ott_platform_task/features/home/presentation/bloc/home_bloc.dart
 import 'core/di/di.dart';
 import 'core/route/routes.dart';
 import 'core/theme/bloc/theme_bloc.dart';
-import 'features/listing/presentation/bloc/listing_bloc.dart';
 import 'features/movie_details/presentation/bloc/movie_details_bloc.dart';
 
 class MyApp extends StatelessWidget {

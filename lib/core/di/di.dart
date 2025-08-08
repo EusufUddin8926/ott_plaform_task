@@ -16,6 +16,7 @@ import '../../features/home/data/repositories/movie_repository_impl.dart';
 import '../../features/home/domain/repositories/movie_repository.dart';
 import '../../shared/data/remote/api_service.dart';
 import '../network/dio_factory.dart';
+import '../preferences/app_prefs.dart';
 import '../route/routes.dart';
 import '../theme/bloc/theme_bloc.dart';
 import '../utils/network_info.dart';
@@ -27,6 +28,7 @@ Future<void> init() async {
   // Initialize SharedPreferences
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+  getIt.registerLazySingleton<AppPreferences>(() => AppPreferences(getIt<SharedPreferences>()));
 
 
   if (!getIt.isRegistered<Connectivity>()) {
