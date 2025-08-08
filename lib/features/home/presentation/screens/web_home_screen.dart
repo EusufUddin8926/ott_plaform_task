@@ -5,7 +5,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ott_platform_task/core/theme/widgets/theme_switch.dart';
 import '../../../../core/models/movie.dart';
-import '../../../movie_details/presentation/screen/movie_details_page.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';

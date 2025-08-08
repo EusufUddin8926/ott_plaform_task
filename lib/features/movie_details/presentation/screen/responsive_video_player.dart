@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ott_platform_task/core/di/di.dart';
 import 'package:ott_platform_task/core/preferences/app_prefs.dart';
@@ -8,9 +7,11 @@ import 'package:chewie/chewie.dart';
 class ResponsiveVideoPlayer extends StatefulWidget {
   final String videoUrl;
   final String videoKey;
+  final String imdbId;
 
   const ResponsiveVideoPlayer({
     super.key,
+    required this.imdbId,
     required this.videoUrl,
     required this.videoKey,
   });
@@ -33,7 +34,7 @@ class _ResponsiveVideoPlayerState extends State<ResponsiveVideoPlayer> {
   }
 
   Future<void> initPlayer() async {
-    final lastPosition = Duration(milliseconds: prefs.getCurrentPosition());
+    final lastPosition = prefs.getCurrentPositionById(widget.imdbId);
 
     _videoController = VideoPlayerController.network(widget.videoUrl);
     await _videoController!.initialize();
@@ -54,7 +55,7 @@ class _ResponsiveVideoPlayerState extends State<ResponsiveVideoPlayer> {
       if (_videoController!.value.isPlaying) {
         final position = _videoController!.value.position;
         if (position.inSeconds % 5 == 0) {
-          prefs.setCurrentPosition(position);
+          prefs.setCurrentPosition(widget.imdbId, _videoController!.value.position.inMilliseconds);
         }
       }
     });
@@ -67,7 +68,7 @@ class _ResponsiveVideoPlayerState extends State<ResponsiveVideoPlayer> {
   @override
   void dispose() {
     if (_videoController != null) {
-      prefs.setCurrentPosition(_videoController!.value.position);
+      prefs.setCurrentPosition(widget.imdbId, _videoController!.value.position.inMilliseconds);
       _videoController!.dispose();
     }
     _chewieController?.dispose();

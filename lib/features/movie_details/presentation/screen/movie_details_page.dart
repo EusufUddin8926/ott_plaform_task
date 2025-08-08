@@ -32,7 +32,8 @@ class MovieDetailsPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 children: [
                   ResponsiveVideoPlayer(
-                    videoUrl: AppConstant.videoUrl,
+                    imdbId: imdbID,
+                    videoUrl: AppConstant.videoUrls,
                     videoKey: 'video_$imdbID',
                   ),
                   const SizedBox(height: 16),
