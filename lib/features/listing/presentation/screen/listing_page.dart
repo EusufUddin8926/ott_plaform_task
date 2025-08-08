@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/di.dart'; // your getIt or DI setup
 import '../bloc/listing_bloc.dart';
@@ -99,37 +100,42 @@ class _MovieListingPageState extends State<MovieListingPage> {
                   itemBuilder: (context, index) {
                     if (index < state.movies.length) {
                       final movie = state.movies[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 70,
-                              height: 90,
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                movie.poster != 'N/A' ? movie.poster : '',
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) =>
-                                    Container(color: Colors.grey.shade800),
-                                errorWidget: (context, url, error) =>
-                                    Container(color: Colors.grey.shade800),
+                      return GestureDetector(
+                        onTap: (){
+                          context.push('/details?imdbID=${movie.imdbID}');
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 70,
+                                height: 90,
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                  movie.poster != 'N/A' ? movie.poster : '',
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) =>
+                                      Container(color: Colors.grey.shade800),
+                                  errorWidget: (context, url, error) =>
+                                      Container(color: Colors.grey.shade800),
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(movie.title),
-                                  const SizedBox(height: 4),
-                                  Text(movie.year),
-                                ],
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(movie.title),
+                                    const SizedBox(height: 4),
+                                    Text(movie.year),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     } else {

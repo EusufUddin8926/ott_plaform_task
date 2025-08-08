@@ -60,10 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildMovieItem(Movie movie, {double width = 110}) {
     return GestureDetector(
       onTap: () {
-        /*Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => MovieDetailsPage(imdbID: movie.imdbID)),
-        )*/
+        // Navigate to the movie details page
+        context.push('/details?imdbID=${movie.imdbID}');
+
       },
       child: SizedBox(
         width: width,
@@ -122,20 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 const Spacer(),
                 TextButton(
                   onPressed: () {
-                    /* Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ListingPage(
-                          title: title,
-                          filterTitle: title == 'Batman' ? 'Batman' : 'movie',
-                          filterYear: title == 'Latest Movies' ? '2022' : null,
-                        ),
-                      ),
-                    );*/
-
+                    // Navigate to the listing page with the filter
                     final filterTitle = title == 'Batman' ? 'Batman' : 'movie';
                     final filterYear = title == 'Latest Movies' ? '2022' : null;
-
                     context.push(
                       '/listing?title=$title&filterTitle=$filterTitle${filterYear != null ? '&filterYear=$filterYear' : ''}',
                     );
@@ -182,10 +170,8 @@ class _HomeScreenState extends State<HomeScreen> {
               final movie = bannerMovies[index];
               return GestureDetector(
                 onTap: (){
-                 // Navigator.push(context, MaterialPageRoute(builder: (_) => MovieDetailsPage(imdbID: movie.imdbID))),
                   context.push('/details?imdbID=${movie.imdbID}');
                 },
-
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Stack(
