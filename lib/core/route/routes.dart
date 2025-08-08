@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/home/presentation/screens/web_home_screen.dart';
 import '../../features/listing/presentation/screen/listing_page.dart';
 import '../../features/movie_details/presentation/screen/movie_details_page.dart';
 
@@ -14,7 +16,9 @@ class AppRouter {
           path: '/',
           pageBuilder: (context, state) => CustomTransitionPage(
             key: state.pageKey,
-            child: const HomeScreen(),
+            child: kIsWeb
+                ? const WebHomeScreen()
+                : const HomeScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(opacity: animation, child: child);
             },

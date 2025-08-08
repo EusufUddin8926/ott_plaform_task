@@ -101,9 +101,7 @@ class _MovieListingPageState extends State<MovieListingPage> {
                     if (index < state.movies.length) {
                       final movie = state.movies[index];
                       return GestureDetector(
-                        onTap: (){
-                          context.push('/details?imdbID=${movie.imdbID}');
-                        },
+                        onTap: () => context.push('/details?imdbID=${movie.imdbID}'),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 8),
