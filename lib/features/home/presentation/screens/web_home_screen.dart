@@ -153,7 +153,7 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
 
   Widget buildCarousel(List<Movie> bannerMovies) {
     return SizedBox(
-      width: MediaQuery.sizeOf(context).width * 0.15,
+      width: 180,
       child: CarouselSlider.builder(
         itemCount: bannerMovies.length,
         options: CarouselOptions(
