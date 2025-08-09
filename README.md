@@ -44,7 +44,7 @@ A Flutter-based OTT VOD application built with **BLoC**, **Clean Architecture**,
 - `cached_network_image`
 - `carousel_slider`
 - `video_player`
-- **Testing**: `bloc_test`, `mocktail`, `flutter_test`
+- **Testing**: `bloc_test`, `mocktail`,
 
 ---
 
