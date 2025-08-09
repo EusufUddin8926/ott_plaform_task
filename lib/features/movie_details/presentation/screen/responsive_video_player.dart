@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ott_platform_task/core/di/di.dart';
 import 'package:ott_platform_task/core/preferences/app_prefs.dart';
+import 'package:ott_platform_task/core/utils/color.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
+
 
 class ResponsiveVideoPlayer extends StatefulWidget {
   final String videoUrl;
@@ -46,6 +48,25 @@ class _ResponsiveVideoPlayerState extends State<ResponsiveVideoPlayer> {
     _chewieController = ChewieController(
       videoPlayerController: _videoController!,
       autoPlay: true,
+      draggableProgressBar: true,
+      aspectRatio: _videoController!.value.aspectRatio,
+      showControlsOnInitialize: true,
+      showControls: true,
+      hideControlsTimer: const Duration(seconds: 3),
+      materialProgressColors: ChewieProgressColors(
+        playedColor: AppColors.errorRed,
+        handleColor: AppColors.errorRed,
+        backgroundColor: AppColors.grey,
+        bufferedColor: AppColors.grey,
+      ),
+      errorBuilder: (context, errorMessage) {
+        return Center(
+          child: Text(
+            errorMessage,
+            style: const TextStyle(color: AppColors.white),
+          ),
+        );
+      },
       looping: false,
       autoInitialize: true,
     );
