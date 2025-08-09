@@ -4,24 +4,26 @@ import 'home_event.dart';
 import 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final MovieRepository movieRepository;
+  final MovieRepository repository;
 
-  HomeBloc({required this.movieRepository}) : super(HomeLoading()) {
-    on<FetchHomeData>((event, emit) async {
-      emit(HomeLoading());
-      try {
-        final banner = await movieRepository.getBannerMovies();
-        final batman = await movieRepository.getBannerMovies();
-        final latest = await movieRepository.getLatestMovies();
+  HomeBloc(this.repository) : super(HomeInitial()) {
+    on<FetchHomeData>(_onFetchHomeData);
+  }
 
-        emit(HomeSuccess(
-          bannerMovies: banner.take(5).toList(),
-          batmanMovies: batman,
-          latestMovies: latest,
-        ));
-      } catch (e) {
-        emit(HomeFailure(e.toString()));
-      }
-    });
+  Future<void> _onFetchHomeData(
+      FetchHomeData event, Emitter<HomeState> emit) async {
+    emit(HomeLoading());
+    try {
+      final movies = await repository.getBatmanMovies();
+      final latest = await repository.getLatestMovies();
+
+      emit(HomeSuccess(
+        bannerMovies: movies.take(5).toList(),
+        batmanMovies: movies,
+        latestMovies: latest,
+      ));
+    } catch (e) {
+      emit(HomeFailure(message: e.toString()));
+    }
   }
 }

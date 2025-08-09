@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ott_platform_task/features/movie_details/presentation/screen/responsive_video_player.dart';
+import 'package:ott_platform_task/features/movie_details/presentation/screen/widgets/responsive_video_player.dart';
 import '../../../../core/constants/app_constant.dart';
 import '../../../../core/di/di.dart';
 import '../bloc/movie_details_bloc.dart';
@@ -28,9 +28,9 @@ class MovieDetailsPage extends StatelessWidget {
           builder: (context, state) {
             if (state is MovieDetailsLoading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is MovieDetailsError) {
-              return Center(child: Text(state.message));
-            } else if (state is MovieDetailsLoaded) {
+            } else if (state is MovieDetailsFailure) {
+              return Center(child: Text(state.error));
+            } else if (state is MovieDetailsSuccess) {
               final md = state.movieDetails;
               return ListView(
                 padding: const EdgeInsets.all(16),

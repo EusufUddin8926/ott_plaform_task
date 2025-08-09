@@ -51,7 +51,7 @@ Future<void> init() async {
 
   getIt.registerLazySingleton<MovieRemoteDataSource>(() => MovieRemoteDataSource(getIt(), getIt()));
   getIt.registerLazySingleton<MovieRepository>(() => MovieRepositoryImpl(getIt()));
-  getIt.registerFactory(() => HomeBloc(movieRepository: getIt()));
+  getIt.registerFactory(() => HomeBloc( getIt()));
 
 
   getIt.registerLazySingleton<ListingMovieRepository>(() => ListingMovieRepositoryImpl(getIt()));
@@ -60,7 +60,7 @@ Future<void> init() async {
 
   getIt.registerLazySingleton<GetMovieDetailsUseCase>(() => GetMovieDetailsUseCase(getIt()));
   getIt.registerLazySingleton<MovieDetailsRepository>(() => MovieDetailsRepositoryImpl(getIt()));
-  getIt.registerFactory(() => MovieDetailsBloc(getIt()));
+  getIt.registerFactory(() => MovieDetailsBloc(repository: getIt()));
 
   getIt.registerSingleton(AppRouter());
 }

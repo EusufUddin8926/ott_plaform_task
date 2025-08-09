@@ -7,7 +7,7 @@ import 'listing_state.dart';
 class ListingBloc extends Bloc<ListingEvent, ListingState> {
   final GetAllMovies getAllMoviesUseCase;
 
-  ListingBloc({required this.getAllMoviesUseCase}) : super(ListingInitial()) {
+  ListingBloc({required this.getAllMoviesUseCase}) : super(const ListingInitial()) {
     on<FetchListingMovies>(_onFetchListingMovies);
     on<FetchMoreMovies>(_onFetchMoreMovies);
   }
@@ -21,7 +21,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
 
   Future<void> _onFetchListingMovies(
       FetchListingMovies event, Emitter<ListingState> emit) async {
-    emit(ListingLoading());
+    emit(const ListingLoading());
     _movies.clear();
     _page = 1;
     _hasMore = true;

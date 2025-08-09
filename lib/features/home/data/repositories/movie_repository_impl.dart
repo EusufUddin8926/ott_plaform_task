@@ -10,12 +10,6 @@ class MovieRepositoryImpl implements MovieRepository {
   MovieRepositoryImpl(this.remote);
 
   @override
-  Future<List<Movie>> getBannerMovies() async {
-    final movies = await remote.searchMovies(query: AppConstant.batmanMovies);
-    return movies.take(5).toList();
-  }
-
-  @override
   Future<List<Movie>> getBatmanMovies() => remote.searchMovies(query: AppConstant.batmanMovies);
 
   @override

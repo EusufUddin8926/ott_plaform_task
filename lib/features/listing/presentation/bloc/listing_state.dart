@@ -1,17 +1,27 @@
+import 'package:equatable/equatable.dart';
 import '../../../../core/models/movie.dart';
 
-abstract class ListingState {}
+abstract class ListingState extends Equatable {
+  const ListingState();
 
-class ListingInitial extends ListingState {}
+  @override
+  List<Object?> get props => [];
+}
 
-class ListingLoading extends ListingState {}
+class ListingInitial extends ListingState {
+  const ListingInitial();
+}
+
+class ListingLoading extends ListingState {
+  const ListingLoading();
+}
 
 class ListingSuccess extends ListingState {
   final List<Movie> movies;
   final bool hasMore;
   final bool isLoadingMore;
 
-  ListingSuccess({
+  const ListingSuccess({
     required this.movies,
     required this.hasMore,
     this.isLoadingMore = false,
@@ -28,11 +38,16 @@ class ListingSuccess extends ListingState {
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     );
   }
-}
 
+  @override
+  List<Object?> get props => [movies, hasMore, isLoadingMore];
+}
 
 class ListingFailure extends ListingState {
   final String error;
 
-  ListingFailure(this.error);
+  const ListingFailure(this.error);
+
+  @override
+  List<Object?> get props => [error];
 }
