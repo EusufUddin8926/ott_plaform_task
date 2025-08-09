@@ -27,7 +27,7 @@ A Flutter-based OTT VOD application built with **BLoC**, **Clean Architecture**,
   - **Domain** – Business logic & entities.
   - **Data** – Repositories, data sources, and models.
   - **Presentation** – UI & BLoCs.
-- **Dependency Injection** with `get_it` & `injectable`.
+- **Dependency Injection** with `get_it` & `equatable`.
 - **Unidirectional Data Flow** – Events → BLoC → States → UI.
 
 ---
